@@ -17,8 +17,6 @@ This package is not fully tested, **use it at your own risk!**
 
 ![Main Window](https://raw.githubusercontent.com/sarfraznawaz2005/gitup/master/screen.png)
 
-![Main Window](https://raw.githubusercontent.com/sarfraznawaz2005/gitup/master/screen2.png)
-
 ## Requirements ##
 
  - PHP >= 5.6
