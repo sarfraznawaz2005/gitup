@@ -1,0 +1,39 @@
+{
+  "name": "sarfraznawaz2005/gitup",
+  "keywords": [
+    "laravel",
+    "deploy",
+    "ftp",
+    "upload"
+  ],
+  "description": "Laravel package to upload git commits to server(s) via (s)ftp.",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Sarfraz Ahmed",
+      "email": "sarfraznawaz2005@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.5.9",
+    "illuminate/support": "~5"
+  },
+  "autoload": {
+    "psr-4": {
+      "Sarfraznawaz2005\\GitUp\\": "src/"
+    }
+  },
+  "minimum-stability": "stable",
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Sarfraznawaz2005\\GitUp\\GitUpServiceProvider"
+      ]
+    }
+  },
+  "suggest": {
+    "league/flysystem": "FTP wrapper used by gitUp.",
+    "league/flysystem-sftp": "Library used by gitUp to upload files via SFTP."
+  }
+}
