@@ -17,6 +17,8 @@ This package is not fully tested, **use it at your own risk!**
 
 ![Main Window](https://raw.githubusercontent.com/sarfraznawaz2005/gitup/master/screen.png)
 
+![Main Window](https://raw.githubusercontent.com/sarfraznawaz2005/gitup/master/screen2.png)
+
 ## Requirements ##
 
  - PHP >= 5.6
@@ -49,6 +51,12 @@ This package is not fully tested, **use it at your own risk!**
  
  By default, gitup UI is available at `/gitup` route.
  
+ ## How it Works ##
+
+ For selected commits, we extract files out of them and create zip archive along with an script to extract this zip archive. The zip archive and extract scripts are then uploaded to selected server where extract script extracts the uploaded zip archive. Once the upload process is done, both zip archive and extract scripts are deleted from the server.
+
+ Uploading zip archive along with extract scripts has huge speed benefits as all committed files get uploaded in one shot as opposed to uploading each committed file individually.
+
  ## Similar Project ##
   - [floyer](https://github.com/sarfraznawaz2005/floyer)
  
