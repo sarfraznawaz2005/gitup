@@ -20,7 +20,7 @@ This package is not fully tested, **use it at your own risk!**
 ## Requirements ##
 
  - PHP >= 5.6
- - `git` added to PATH env (If using Git driver)
+ - `git` added to PATH env
  - `FTP` and `Zip` PHP extensions (both ship with PHP and usually turned on)
  
  ## Installation ##
