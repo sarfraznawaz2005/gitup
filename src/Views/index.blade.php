@@ -46,7 +46,7 @@
 
             <tbody>
             @foreach($commits as $commit)
-                <tr>
+                <tr style="background:{{Carbon\Carbon::parse(str_replace('-', '/', $commit['date']))->isToday() ? '#d3ffdd' :''}}">
                     <td style="width: 150px;">{{$commit['user']}}</td>
                     <td style="width: 100px;">{{$commit['commit_id']}}</td>
                     <td style="width: 150px;">{{$commit['date']}}</td>
