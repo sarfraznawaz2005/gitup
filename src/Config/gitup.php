@@ -36,7 +36,7 @@ return [
             'password' => 'password',
             'root' => '/',
             # Publically accessible folder on server for your app
-            'public_path' => '/',
+            'public_path' => '/public',
             'port' => 21,
             'passive' => true,
             'ssl' => false,
