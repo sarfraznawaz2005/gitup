@@ -22,6 +22,8 @@ This package is not fully tested, **use it at your own risk!**
  - PHP >= 5.6
  - `git` added to PATH env
  - `FTP` and `Zip` PHP extensions (both ship with PHP and usually turned on)
+ - `league/flysystem` FTP wrapper used by gitUp. (comes with laravel by default)
+ - `league/flysystem-sftp` Library used by gitUp to upload files via SFTP.
  
  ## Installation ##
  
