@@ -55,7 +55,7 @@
     <fieldset class="form-group">
         <legend>Diff Log</legend>
         <div class="difflog">
-            {!! $diffLog !!}
+            {!! strip_tags($diffLog, '<br><span>') !!}
         </div>
     </fieldset>
 @endsection

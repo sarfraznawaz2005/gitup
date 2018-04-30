@@ -34,7 +34,13 @@ class GitUpController extends BaseController
             $isDirty = true;
         }
 
-        $uploadedCommits = DB::table('commits')->pluck('commit_id')->toArray();
+        $uploadedCommits = DB::table('commits')->pluck('commit_id');
+
+        if ($uploadedCommits) {
+            $uploadedCommits = $uploadedCommits->toArray();
+        } else {
+            $uploadedCommits = [];
+        }
 
         return view('gitup::index', compact('commits', 'isDirty', 'uploadedCommits'));
     }

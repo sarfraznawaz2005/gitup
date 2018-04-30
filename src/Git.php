@@ -59,6 +59,7 @@ class Git
 
         if ($commits) {
             $lines = explode("\n", $commits);
+            $lines = array_filter($lines);
 
             foreach ($lines as $line) {
                 if (!trim($line)) {
@@ -67,6 +68,10 @@ class Git
 
                 $pieces = explode('|', trim($line));
                 $pieces = array_map('trim', $pieces);
+
+                if (!isset($pieces[2])) {
+                    continue;
+                }
 
                 $pieces[2] = Carbon::parse($pieces[2])->format('m-d-Y H:i:s');
 
