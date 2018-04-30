@@ -37,7 +37,13 @@ class GitUpController extends BaseController
         $uploadedCommits = DB::table('commits')->pluck('commit_id');
 
         if ($uploadedCommits) {
-            $uploadedCommits = $uploadedCommits->toArray();
+
+            if (\is_string($uploadedCommits)) {
+                $uploadedCommits = [$uploadedCommits];
+            } else {
+                $uploadedCommits = $uploadedCommits->toArray();
+            }
+
         } else {
             $uploadedCommits = [];
         }

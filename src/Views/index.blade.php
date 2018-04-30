@@ -86,7 +86,7 @@
 @push('scripts')
     <script>
         var table = $('.table').DataTable({
-            "order": [2, 'desc'],
+            "order": [],
             "responsive": true,
             "pageLength": 25,
             "autoWidth": false,
