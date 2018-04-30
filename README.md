@@ -41,13 +41,13 @@ This package is not fully tested, **use it at your own risk!**
  
  ---
  
- Run `php artisan vendor:publish` to publish package's config and migration file. You should now have `gitup.php` file published in `app/config` folder. It will also publish migration file in `database/migrations` folder.
+ Run `php artisan vendor:publish` to publish package's config and migration file. You should now have `config/gitup.php` file published. It will also publish migration file in `database/migrations` folder.
  
  Run `php artisan migrate` to create `commits` table in your database.
  
  Check and update `config/gitup.php` file to setup config options including S(FTP) server information where you would like to upload.
  
- By default, gitup UI is available at `/gitup` url.
+ By default, gitup UI is available at `/gitup` route.
  
  ## Similar Project ##
   - [floyer](https://github.com/sarfraznawaz2005/floyer)
