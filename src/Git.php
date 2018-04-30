@@ -6,8 +6,7 @@
  * Time: 1:56 PM
  */
 
-namespace Sarfraznawaz2005\GitUp\Git;
-
+namespace Sarfraznawaz2005\GitUp;
 
 use Carbon\Carbon;
 

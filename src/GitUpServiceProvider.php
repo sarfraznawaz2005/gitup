@@ -3,7 +3,6 @@
 namespace Sarfraznawaz2005\GitUp;
 
 use Illuminate\Support\ServiceProvider;
-use Sarfraznawaz2005\GitUp\Git\Git;
 
 class GitUpServiceProvider extends ServiceProvider
 {
