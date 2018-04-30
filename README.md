@@ -1,2 +1,3 @@
 # gitup
-Laravel package to upload github commits to (s)ftp servers.
+
+Laravel package to upload git commits to server(s) via (s)ftp.
