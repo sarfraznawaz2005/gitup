@@ -69,11 +69,11 @@ class Git
                 $pieces = explode('|', trim($line));
                 $pieces = array_map('trim', $pieces);
 
-                if (!isset($pieces[2])) {
+                if (! isset($pieces[2])) {
                     continue;
                 }
 
-                $pieces[2] = Carbon::parse($pieces[2])->format('m-d-Y H:i:s');
+                $pieces[2] = Carbon::parse(date('Y/m/d H:i:s', strtotime($pieces[2])))->format('m-d-Y H:i:s');
 
                 $data[] = [
                     'user' => $pieces[0],
