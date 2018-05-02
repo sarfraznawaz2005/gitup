@@ -51,7 +51,7 @@
 
                 $uServers = [];
                 $isUploaded = false;
-                $status = '<span class="badge badge-warning">Pending</span>';
+                $status = '<span class="badge badge-danger">Pending</span>';
 
                 if (in_array($commit['commit_id'], $uploadedCommits)) {
 
@@ -67,7 +67,7 @@
                         $status = '<span class="badge badge-success">Uploaded</span>';
                         $isUploaded = true;
                     } else {
-                        $status = '<span class="badge badge-success">' . implode(' | ', $uServers) . '</span>';
+                        $status = '<span class="badge badge-warning">' . implode(' | ', $uServers) . '</span>';
                     }
                 }
 

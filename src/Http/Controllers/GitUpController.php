@@ -34,7 +34,7 @@ class GitUpController extends BaseController
             $isDirty = true;
         }
 
-        $uploadedCommits = DB::table('commits')->pluck('commit_id');
+        $uploadedCommits = collect(DB::table('commits')->get())->pluck('commit_id');
 
         if ($uploadedCommits) {
 
@@ -300,9 +300,9 @@ class GitUpController extends BaseController
                             'created_at' => date('Y-m-d H:i:s'),
                             'updated_at' => date('Y-m-d H:i:s'),
                         ]);
-
-                        echo '<hr>';
                     }
+
+                    echo '<hr>';
 
                 } else {
                     $this->error('Error: Unable to extract files.');
