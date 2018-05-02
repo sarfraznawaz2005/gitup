@@ -15,7 +15,8 @@ class CreateCommitsTable extends Migration
     {
         Schema::create('commits', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('commit_id')->unique();
+            $table->string('commit_id');
+            $table->string('server');
             $table->string('message');
             $table->string('user');
             $table->text('files');

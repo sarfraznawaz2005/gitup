@@ -46,12 +46,39 @@
 
             <tbody>
             @foreach($commits as $commit)
+
+                <?php
+
+                $uServers = [];
+                $isUploaded = false;
+                $status = '<span class="badge badge-warning">Pending</span>';
+
+                if (in_array($commit['commit_id'], $uploadedCommits)) {
+
+                    $uServers = collect(DB::table('commits')
+                        ->where('commit_id', $commit['commit_id'])
+                        ->get(['server']))
+                        ->pluck('server')
+                        ->toArray();
+
+                    $uServers = array_filter($uServers);
+
+                    if (count($uServers) === count(config('gitup.servers'))) {
+                        $status = '<span class="badge badge-success">Uploaded</span>';
+                        $isUploaded = true;
+                    } else {
+                        $status = '<span class="badge badge-success">' . implode(' | ', $uServers) . '</span>';
+                    }
+                }
+
+                ?>
+
                 <tr style="background:{{Carbon\Carbon::parse(str_replace('-', '/', $commit['date']))->isToday() ? '#d3ffdd' :''}}">
                     <td style="width: 150px;">{{$commit['user']}}</td>
                     <td style="width: 100px;">{{$commit['commit_id']}}</td>
                     <td style="width: 150px;">{{$commit['date']}}</td>
                     <td>{{$commit['message']}}</td>
-                    <td style="text-align: center; width: 100px;">{!! in_array($commit['commit_id'], $uploadedCommits) ? '<span class="badge badge-success">Uploaded</span>' : '<span class="badge badge-warning">Pending</span>' !!}</td>
+                    <td style="text-align: center; width: 100px;" title="{{implode(' | ', $uServers)}}">{!! $status !!}</td>
                     <td style="text-align: center; width: 1px;">
                         <a href="{{route('gitup_files', $commit['commit_id'])}}"
                            data-toggle="tooltip"
@@ -61,7 +88,7 @@
                         </a>
                     </td>
                     <td style="text-align: center; width: 30px;">
-                        @if(!in_array($commit['commit_id'], $uploadedCommits))
+                        @if(!$isUploaded)
                             <input type="checkbox" name="commits[]" class="chkUpload" value="{{$commit['commit_id']}}">
                         @endif
                     </td>

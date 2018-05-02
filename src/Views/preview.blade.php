@@ -8,7 +8,7 @@
 
 @section('content')
 
-    <form action="{{route('gitup_upload')}}" method="post">
+    <form id="frm" action="{{route('gitup_upload')}}" method="post">
         {!! csrf_field() !!}
 
         <div class="card">
@@ -95,16 +95,18 @@
                             Upload
                         </legend>
 
-                        <div class="form-group text-center" style="margin-bottom: 0;">
-                            <label for="server">Server</label>
-                            <select name="server_name" id="server" style="width: 150px;" required>
-                                <option value="">Choose</option>
-
-                                @foreach($servers as $name => $serverDetails)
-                                    <option value="{{$name}}">{{ucfirst($name)}}</option>
-                                @endforeach
-                            </select>
-                            <hr>
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label for="server"><strong>Select Server(s):</strong></label><br><br>
+                            @foreach($servers as $name => $serverDetails)
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <input type="checkbox" class="form-check-input form-control"
+                                               name="server_name[]" id="{{$name}}" value="{{$name}}">
+                                        {{ucfirst($name)}}
+                                    </label>
+                                </div>
+                                <hr>
+                            @endforeach
                             <button type="submit" class="btn btn-success btn-block">Proceed to Upload</button>
                         </div>
                     </fieldset>
@@ -119,3 +121,16 @@
     </form>
 
 @endsection
+
+@push('scripts')
+
+    <script>
+        $('#frm').submit(function () {
+            if ($('.form-check-input:checked').length <= 0) {
+                alert('Please select one or more servers first.');
+                return false;
+            }
+        });
+    </script>
+
+    @endsection

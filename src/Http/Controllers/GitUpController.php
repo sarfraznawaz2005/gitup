@@ -38,7 +38,7 @@ class GitUpController extends BaseController
 
         if ($uploadedCommits) {
 
-            if (\is_string($uploadedCommits)) {
+            if (gettype($uploadedCommits) === 'string') {
                 $uploadedCommits = [$uploadedCommits];
             } else {
                 $uploadedCommits = $uploadedCommits->toArray();
@@ -119,187 +119,201 @@ class GitUpController extends BaseController
         $uploadFiles = [];
         $deleteFiles = [];
 
-        if (!request()->server_name) {
+        if (!count(request()->server_name)) {
             $this->error('No server specified!');
             exit;
         }
-
-        $options = config('gitup.servers.' . request()->server_name);
-
-        // check to make sure we are good to go
-        $this->checkUp($options);
-
-        /*
-         * Git Status Codes
-         *
-         * A: addition of a file
-         * C: copy of a file into a new one
-         * D: deletion of a file
-         * M: modification of the contents or mode of a file
-         * R: renaming of a file
-         * T: change in the type of the file
-         * U: file is unmerged (you must complete the merge before it can be committed)
-         * X: "unknown" change type (most probably a bug, please report it)
-         */
-
-        foreach (request()->commits as $key => $commit) {
-            $files[] = GitUp::getFiles($commit);
-        }
-
-        foreach ($files as $fileArray) {
-            foreach ($fileArray as $file) {
-                $type = current($file);
-                $path = next($file);
-
-                if (!trim($path) || $path == '.' || $path == '..') {
-                    continue;
-                }
-
-                if ($type && $path) {
-                    if ($type === 'A' || $type === 'C' || $type === 'M' || $type === 'T') {
-                        $uploadFiles[] = $path;
-                    } elseif ($type === 'D') {
-                        $deleteFiles[] = $path;
-                    }
-                }
-            }
-        }
-
-        // do not upload excluded files
-        $this->uploader = new Uploader();
-        $this->uploader->setOptions($options);
-
-        $uploadFiles = $this->uploader->filterIgnoredFiles($uploadFiles, $this->options['ignored'])['upload'];
 
         // output
         echo '<body style="background: #eee;"></body>';
         echo '<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" />';
         echo '<div style="padding: 15px; background: #333; color:#fff; width: 600px; margin: 20px auto; border-radius: 10px;">';
 
-        if (!$uploadFiles) {
-            $this->out('Nothing to Upload');
-            exit;
-        }
+        $this->out('Deployment started...');
+        echo '<hr>';
 
-        try {
+        foreach (request()->server_name as $server) {
 
-            $this->out('Deployment started...');
-            $this->out('Zipping files...');
-
-            $result = $this->uploader->createZipOfChangedFiles($uploadFiles);
-
-            if ($result === false) {
-                $this->error('Could not create zip file to upload :(');
-                exit;
+            if (!$server) {
+                continue;
             }
 
-            $this->out('Zip file created...');
+            $options = config('gitup.servers.' . $server);
 
-            $connector = $this->uploader->getConnector();
+            // check to make sure we are good to go
+            $this->checkUp($options);
 
-            $this->out('Connecting to server...');
+            /*
+             * Git Status Codes
+             *
+             * A: addition of a file
+             * C: copy of a file into a new one
+             * D: deletion of a file
+             * M: modification of the contents or mode of a file
+             * R: renaming of a file
+             * T: change in the type of the file
+             * U: file is unmerged (you must complete the merge before it can be committed)
+             * X: "unknown" change type (most probably a bug, please report it)
+             */
 
-            $connector->connect($options);
-
-            $this->out('Uploading extract files script...');
-
-            $uploadStatus = $connector->upload($this->uploader->extractScriptFile, $options['public_path']);
-
-            if (!$uploadStatus) {
-                $this->error('Could not upload script file.');
-                exit;
+            foreach (request()->commits as $key => $commit) {
+                $files[] = GitUp::getFiles($commit);
             }
 
-            $this->out('Uploading zip file...');
+            foreach ($files as $fileArray) {
+                foreach ($fileArray as $file) {
+                    $type = current($file);
+                    $path = next($file);
 
-            $uploadStatus = $connector->upload($this->uploader->zipFile, '/');
+                    if (!trim($path) || $path == '.' || $path == '..') {
+                        continue;
+                    }
 
-            if (!$uploadStatus) {
-                $this->error('Could not upload zip file.');
-                exit;
-            }
-
-            $this->out('Extracting files on server...');
-
-            $hitUrl = $options['domain'] . $options['public_path'] . '/' . basename($this->uploader->extractScriptFile);
-            $response = file_get_contents($hitUrl);
-
-            if ($response === 'ok') {
-
-                $this->out('Files uploaded successfully...');
-
-                // delete files deleted in commits
-                if ($deleteFiles) {
-                    foreach ($deleteFiles as $file) {
-                        $deleteStatus = $connector->deleteAt($file);
-
-                        if ($deleteStatus === true) {
-                            $this->out('Deleted: ' . $file);
-                        } else {
-                            $this->error("Could not delete '$file'");
+                    if ($type && $path) {
+                        if ($type === 'A' || $type === 'C' || $type === 'M' || $type === 'T') {
+                            $uploadFiles[] = $path;
+                        } elseif ($type === 'D') {
+                            $deleteFiles[] = $path;
                         }
                     }
                 }
+            }
 
-                $this->out('Finishing, please wait...');
+            // do not upload excluded files
+            $this->uploader = new Uploader();
+            $this->uploader->setOptions($options);
 
-                // delete script file
-                $connector->deleteAt($options['public_path'] . $this->uploader->extractScriptFile);
+            $uploadFiles = $this->uploader->filterIgnoredFiles($uploadFiles, $this->options['ignored'])['upload'];
 
-                // delete deployment file
-                $connector->delete(basename($this->uploader->zipFile));
+            if (!$uploadFiles) {
+                $this->out('Nothing to Upload');
+                exit;
+            }
 
-                // save data in db too
-                $commits = GitUp::commitsData(request()->commits);
+            try {
 
-                foreach ($commits as $commit) {
+                $this->out('Server: ' . '<span class="badge badge-success">' . ucfirst($server) . '</span>');
 
-                    $uploadFiles = [];
-                    $deleteFiles = [];
+                $this->out('Zipping files...');
 
-                    $files = GitUp::getFiles($commit['commit_id']);
+                $result = $this->uploader->createZipOfChangedFiles($uploadFiles);
 
-                    foreach ($files as $fileArray) {
-                        $type = current($fileArray);
-                        $path = next($fileArray);
+                if ($result === false) {
+                    $this->error('Could not create zip file to upload :(');
+                    exit;
+                }
 
-                        if (!trim($path) || $path == '.' || $path == '..') {
-                            continue;
-                        }
+                $this->out('Zip file created...');
 
-                        if ($type && $path) {
-                            if ($type === 'A' || $type === 'C' || $type === 'M' || $type === 'T') {
-                                $uploadFiles[] = $path;
-                            } elseif ($type === 'D') {
-                                $deleteFiles[] = $path;
+                $connector = $this->uploader->getConnector();
+
+                $this->out('Connecting to server...');
+
+                $connector->connect($options);
+
+                $this->out('Uploading extract files script...');
+
+                $uploadStatus = $connector->upload($this->uploader->extractScriptFile, $options['public_path']);
+
+                if (!$uploadStatus) {
+                    $this->error('Could not upload script file.');
+                    exit;
+                }
+
+                $this->out('Uploading zip file...');
+
+                $uploadStatus = $connector->upload($this->uploader->zipFile, '/');
+
+                if (!$uploadStatus) {
+                    $this->error('Could not upload zip file.');
+                    exit;
+                }
+
+                $this->out('Extracting files on server...');
+
+                $hitUrl = $options['domain'] . $options['public_path'] . '/' . basename($this->uploader->extractScriptFile);
+                $response = file_get_contents($hitUrl);
+
+                if ($response === 'ok') {
+
+                    $this->out('Files uploaded successfully...');
+
+                    // delete files deleted in commits
+                    if ($deleteFiles) {
+                        foreach ($deleteFiles as $file) {
+                            $deleteStatus = $connector->deleteAt($file);
+
+                            if ($deleteStatus === true) {
+                                $this->out('Deleted: ' . $file);
+                            } else {
+                                $this->error("Could not delete '$file'");
                             }
                         }
                     }
 
-                    $files = [
-                        'upload' => $uploadFiles,
-                        'delete' => $deleteFiles,
-                    ];
+                    $this->out('Finishing, please wait...');
 
-                    DB::table('commits')->insert([
-                        'user' => $commit['user'],
-                        'commit_id' => $commit['commit_id'],
-                        'message' => $commit['message'],
-                        'files' => json_encode($files),
-                        'created_at' => date('Y-m-d H:i:s'),
-                        'updated_at' => date('Y-m-d H:i:s'),
-                    ]);
+                    // delete script file
+                    $connector->deleteAt($options['public_path'] . $this->uploader->extractScriptFile);
+
+                    // delete deployment file
+                    $connector->delete(basename($this->uploader->zipFile));
+
+                    // save data in db too
+                    $commits = GitUp::commitsData(request()->commits);
+
+                    foreach ($commits as $commit) {
+
+                        $uploadFiles = [];
+                        $deleteFiles = [];
+
+                        $files = GitUp::getFiles($commit['commit_id']);
+
+                        foreach ($files as $fileArray) {
+                            $type = current($fileArray);
+                            $path = next($fileArray);
+
+                            if (!trim($path) || $path == '.' || $path == '..') {
+                                continue;
+                            }
+
+                            if ($type && $path) {
+                                if ($type === 'A' || $type === 'C' || $type === 'M' || $type === 'T') {
+                                    $uploadFiles[] = $path;
+                                } elseif ($type === 'D') {
+                                    $deleteFiles[] = $path;
+                                }
+                            }
+                        }
+
+                        $files = [
+                            'upload' => $uploadFiles,
+                            'delete' => $deleteFiles,
+                        ];
+
+                        DB::table('commits')->insert([
+                            'user' => $commit['user'],
+                            'commit_id' => $commit['commit_id'],
+                            'server' => $server,
+                            'message' => $commit['message'],
+                            'files' => json_encode($files),
+                            'created_at' => date('Y-m-d H:i:s'),
+                            'updated_at' => date('Y-m-d H:i:s'),
+                        ]);
+
+                        echo '<hr>';
+                    }
+
+                } else {
+                    $this->error('Error: Unable to extract files.');
                 }
 
-                $this->out('Deployment finished :)');
-
-            } else {
-                $this->error('Error: Unable to extract files.');
+            } catch (\Exception $e) {
+                $this->error($e->getMessage());
             }
-
-        } catch (\Exception $e) {
-            $this->error($e->getMessage());
         }
+
+        $this->out('Deployment finished :)');
 
         echo '<hr>';
         echo '<a href="' . route('__gitup__') . '" class="btn btn-warning btn-sm">&larr; Back</a>';
