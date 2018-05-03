@@ -291,15 +291,22 @@ class GitUpController extends BaseController
                             'delete' => $deleteFiles,
                         ];
 
-                        DB::table('commits')->insert([
-                            'user' => $commit['user'],
-                            'commit_id' => $commit['commit_id'],
-                            'server' => $server,
-                            'message' => $commit['message'],
-                            'files' => json_encode($files),
-                            'created_at' => date('Y-m-d H:i:s'),
-                            'updated_at' => date('Y-m-d H:i:s'),
-                        ]);
+                        $rExists = DB::table('commits')
+                            ->where('commit_id', $commit['commit_id'])
+                            ->where('server', $server)
+                            ->first();
+
+                        if (!$rExists) {
+                            DB::table('commits')->insert([
+                                'user' => $commit['user'],
+                                'commit_id' => $commit['commit_id'],
+                                'server' => $server,
+                                'message' => $commit['message'],
+                                'files' => json_encode($files),
+                                'created_at' => date('Y-m-d H:i:s'),
+                                'updated_at' => date('Y-m-d H:i:s'),
+                            ]);
+                        }
                     }
 
                     echo '<hr>';
