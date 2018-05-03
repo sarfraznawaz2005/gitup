@@ -62,6 +62,8 @@
                         ->toArray();
 
                     $uServers = array_filter($uServers);
+                    $uServers = array_map('ucfirst', $uServers);
+                    $uServers = array_unique($uServers);                    
 
                     if (count($uServers) === count(config('gitup.servers'))) {
                         $status = '<span class="badge badge-success">Uploaded</span>';
