@@ -75,7 +75,7 @@ class Uploader
             $desination = str_replace('\\', '/', $desination);
 
             if (!copy($source, $desination)) {
-                $this->error('Count not copy: ' . $desination);
+                echo 'Count not copy: ' . $desination;
             }
         }
 
