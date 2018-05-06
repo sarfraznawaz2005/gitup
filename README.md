@@ -17,6 +17,10 @@ This package is not fully tested, **use it at your own risk!**
 
 ![Main Window](https://raw.githubusercontent.com/sarfraznawaz2005/gitup/master/screen.png)
 
+## Why ##
+
+We have multiple servers eg live, staging, testing, etc and client wanted us to upload task/story # X to staging only or story Y to live only that's when it was hard to track down files worked upon earlier and then upload them selectively; a time consuming process and nuisance so we created this package so that we can easily upload with one click selected stories to asked servers.
+
 ## Requirements ##
 
  - PHP >= 5.6
