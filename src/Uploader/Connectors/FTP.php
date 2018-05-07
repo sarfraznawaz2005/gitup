@@ -89,11 +89,6 @@ class FTP implements ConnectorInterface
     
     function disconnect()
     {
-        if (is_resource($this->connector)) {
-            dd($this->connector);
-            ftp_close($this->connector);
-        }
-
-        $this->connector = null;        
+        $this->connector->getAdapter()->disconnect();
     }    
 }
