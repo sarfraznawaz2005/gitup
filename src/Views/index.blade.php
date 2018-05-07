@@ -79,7 +79,7 @@
                     <td style="width: 150px;">{{$commit['user']}}</td>
                     <td style="width: 100px;">{{$commit['commit_id']}}</td>
                     <td style="width: 150px;">{{$commit['date']}}</td>
-                    <td>{{$commit['message']}}</td>
+                    <td>{!! nl2br($commit['message']) !!}</td>
                     <td style="text-align: center; width: 100px;" title="{{implode(' | ', $uServers)}}">{!! $status !!}</td>
                     <td style="text-align: center; width: 1px;">
                         <a href="{{route('gitup_files', $commit['commit_id'])}}"
