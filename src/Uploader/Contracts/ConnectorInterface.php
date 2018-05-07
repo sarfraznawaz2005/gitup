@@ -21,4 +21,6 @@ interface ConnectorInterface
     function write($path, $contents, $overwrite = true);
 
     function read($path);
+    
+    function disconnect();
 }
