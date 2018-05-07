@@ -310,6 +310,9 @@ class GitUpController extends BaseController
                     }
 
                     echo '<hr>';
+                    
+                    // to avoid too many connections error
+                    $connector->disconnect();
 
                 } else {
                     $this->error('Error: Unable to extract files.');
