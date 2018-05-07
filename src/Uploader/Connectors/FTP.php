@@ -86,4 +86,9 @@ class FTP implements ConnectorInterface
     {
         return $this->connector->read(basename($path));
     }
+    
+    function disconnect()
+    {
+        return $this->connector->disconnect();
+    }    
 }
