@@ -189,6 +189,8 @@ class GitUpController extends BaseController
                 $this->out('Nothing to Upload');
                 exit;
             }
+            
+            $connector = $this->uploader->getConnector();
 
             try {
 
@@ -204,8 +206,6 @@ class GitUpController extends BaseController
                 }
 
                 $this->out('Zip file created...');
-
-                $connector = $this->uploader->getConnector();
 
                 $this->out('Connecting to server...');
 
@@ -317,6 +317,8 @@ class GitUpController extends BaseController
 
             } catch (\Exception $e) {
                 $this->error($e->getMessage());
+                
+                $connector->disconnect();
             }
         }
 
@@ -324,6 +326,8 @@ class GitUpController extends BaseController
 
         echo '<hr>';
         echo '<a href="' . route('__gitup__') . '" class="btn btn-warning btn-sm">&larr; Back</a>';
+        
+        $connector->disconnect();
     }
 
     protected function out($message)
