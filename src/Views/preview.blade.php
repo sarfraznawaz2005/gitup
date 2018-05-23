@@ -13,7 +13,7 @@
 
         <div class="card">
             <div class="card-header bg-success text-white">
-                <strong>Files to Upload</strong>
+                <strong>Files to Upload (Total {{count($uploadFiles)}})</strong>
             </div>
             <div class="card-body">
                 <table class="table table-condensed table-bordered">
@@ -38,7 +38,7 @@
 
         <div class="card">
             <div class="card-header bg-danger text-white">
-                <strong>Files to Delete</strong>
+                <strong>Files to Delete (Total {{count($deleteFiles)}})</strong>
             </div>
             <div class="card-body">
                 <table class="table table-condensed table-bordered">
@@ -63,7 +63,7 @@
 
         <div class="card">
             <div class="card-header bg-secondary text-white">
-                <strong>Files to Ignore</strong>
+                <strong>Files to Ignore (Total {{count($ignoredFiles)}})</strong>
             </div>
             <div class="card-body">
                 <table class="table table-condensed table-bordered">
