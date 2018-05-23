@@ -58,7 +58,7 @@ class Git
         $data = [];
 
         if ($commits) {
-            $lines = explode("\n\n", $commits);
+            $lines = explode("\n", $commits);
             $lines = array_filter($lines);
 
             foreach ($lines as $line) {
