@@ -69,10 +69,12 @@ class Uploader
             $file = str_replace('\\', '/', $file);
 
             $source = getcwd() . '/' . $file;
-            $source = str_replace('public/', '', $source);
+            $source = str_replace('public/public/', 'public/', $source);
 
             $desination = $this->exportFolder . DIRECTORY_SEPARATOR . $file;
+
             $desination = str_replace('\\', '/', $desination);
+            $source = str_replace('\\', '/', $source);
 
             if (!copy($source, $desination)) {
                 echo 'Could not copy: ' . $desination;
