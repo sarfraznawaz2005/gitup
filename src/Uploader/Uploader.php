@@ -73,6 +73,10 @@ class Uploader
 
             $source = getcwd() . '/' . $file;
             $source = str_replace('public/public/', 'public/', $source);
+            
+            if (!file_exists($source)) {
+                $source = str_replace('public/', '', $source);
+            }            
 
             $desination = $this->exportFolder . DIRECTORY_SEPARATOR . $file;
 
