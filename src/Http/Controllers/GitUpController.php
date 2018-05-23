@@ -62,6 +62,8 @@ class GitUpController extends BaseController
             $files = GitUp::getFiles();
         }
 
+        $files = array_unique($files);
+
         return view('gitup::files', compact('files', 'diffLog'));
     }
 
@@ -101,8 +103,8 @@ class GitUpController extends BaseController
         $this->uploader = new Uploader();
 
         $files = $this->uploader->filterIgnoredFiles($uploadFiles, $this->options['ignored']);
-        $uploadFiles = $files['upload'];
-        $ignoredFiles = $files['ignored'];
+        $uploadFiles = array_unique($files['upload']);
+        $ignoredFiles = array_unique($files['ignored']);
 
         return view('gitup::preview', compact('uploadFiles', 'deleteFiles', 'ignoredFiles', 'servers', 'commits'));
     }
@@ -125,11 +127,11 @@ class GitUpController extends BaseController
         }
 
         // output
-        echo '<body style="background: #eee;"></body>';
+        echo '<body style="background: #eee; font-size: 15px;"></body>';
         echo '<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" />';
-        echo '<div style="padding: 15px; background: #333; color:#fff; width: 600px; margin: 20px auto; border-radius: 10px;">';
+        echo '<div style="padding: 15px; background: #333; color:#fff; width: 400px; margin: 20px auto; border-radius: 10px;">';
 
-        $this->out('Deployment started...');
+        $this->out('<span class="badge badge-pill badge-primary">Deployment started...</span>');
         echo '<hr>';
 
         foreach (request()->server_name as $server) {
@@ -286,6 +288,9 @@ class GitUpController extends BaseController
                             }
                         }
 
+                        $uploadFiles = array_unique($uploadFiles);
+                        $deleteFiles = array_unique($deleteFiles);
+
                         $files = [
                             'upload' => $uploadFiles,
                             'delete' => $deleteFiles,
@@ -325,7 +330,7 @@ class GitUpController extends BaseController
             }
         }
 
-        $this->out('Deployment finished :)');
+        $this->out('<span class="badge badge-pill badge-primary">Deployment finished :)</span>');
 
         echo '<hr>';
         echo '<a href="' . route('__gitup__') . '" class="btn btn-warning btn-sm">&larr; Back</a>';
