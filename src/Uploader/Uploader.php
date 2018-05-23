@@ -58,6 +58,9 @@ class Uploader
         file_put_contents($this->extractScriptFile, $this->extractScript($this->options['root']));
 
         @mkdir($this->exportFolder, 0777, true);
+        
+        // remove duplicates
+        $files = array_unique($files);        
 
         foreach ($files as $file) {
             $folder = $this->exportFolder . DIRECTORY_SEPARATOR . dirname($file);
