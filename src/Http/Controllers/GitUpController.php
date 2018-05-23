@@ -62,8 +62,6 @@ class GitUpController extends BaseController
             $files = GitUp::getFiles();
         }
 
-        $files = array_unique($files);
-
         return view('gitup::files', compact('files', 'diffLog'));
     }
 
