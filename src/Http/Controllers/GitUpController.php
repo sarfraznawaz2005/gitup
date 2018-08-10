@@ -125,9 +125,10 @@ class GitUpController extends BaseController
         }
 
         // output
-        echo '<body style="background: #eee; font-size: 15px;"></body>';
+        echo '<body style="background: #111; font-size: 15px; padding: 0; margin: 0;"></body>';
         echo '<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" />';
-        echo '<div style="padding: 15px; background: #333; color:#fff; width: 400px; margin: 20px auto; border-radius: 10px;">';
+        echo '<div style="padding: 15px; background: #111; color:#a6ffa6;">';
+        echo '<script>var scroll = 1000; var interval = setInterval(function(){ window.scrollTo({top:scroll, behavior: "smooth"}); scroll += 100;}, 500);</script>';        
 
         $this->out('<span class="badge badge-pill badge-primary">Deployment started...</span>');
         echo '<hr>';
@@ -323,8 +324,8 @@ class GitUpController extends BaseController
 
             } catch (\Exception $e) {
                 $this->error($e->getMessage());
-                
                 $connector->disconnect();
+                echo '<script>clearInterval(interval);</script>';
             }
         }
 
@@ -332,6 +333,8 @@ class GitUpController extends BaseController
 
         echo '<hr>';
         echo '<a href="' . route('__gitup__') . '" class="btn btn-warning btn-sm">&larr; Back</a>';
+        echo '<script>clearInterval(interval);</script>';
+        echo '<script>window.scrollTo({top:5000, behavior: "smooth"});</script>';        
         
         $connector->disconnect();
     }
