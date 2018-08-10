@@ -127,7 +127,7 @@ class GitUpController extends BaseController
         // output
         echo '<body style="background: #111; font-size: 15px; padding: 0; margin: 0;"></body>';
         echo '<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" />';
-        echo '<div style="padding: 15px; background: #111; color:#a6ffa6;">';
+        echo '<div style="padding: 15px; background: #111; color:#eee;">';
         echo '<script>var scroll = 1000; var interval = setInterval(function(){ window.scrollTo({top:scroll, behavior: "smooth"}); scroll += 100;}, 500);</script>';        
 
         $this->out('<span class="badge badge-pill badge-primary">Deployment started...</span>');
