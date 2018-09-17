@@ -52,14 +52,18 @@
                 $uServers = [];
                 $isUploaded = false;
                 $status = '<span class="badge badge-danger">Pending</span>';
+                
+                $thisCommitServers = $uploadedCommits->filter(function ($item) use($commit) {
+                    if ($item->commit_id) {
+                        return $item->commit_id === $commit['commit_id'];
+                    }
 
-                if (in_array($commit['commit_id'], $uploadedCommits)) {
+                    return false;
+                });                
 
-                    $uServers = collect(DB::table('commits')
-                        ->where('commit_id', $commit['commit_id'])
-                        ->get(['server']))
-                        ->pluck('server')
-                        ->toArray();
+                if ($thisCommitServers->count()) {
+
+                    $uServers = $thisCommitServers->pluck('server')->toArray();
 
                     $uServers = array_filter($uServers);
                     $uServers = array_map('ucfirst', $uServers);
