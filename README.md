@@ -15,7 +15,10 @@ This package is not fully tested, **use it at your own risk!**
 
 ## Screenshot ##
 
-![Main Window](https://raw.githubusercontent.com/sarfraznawaz2005/gitup/master/screen.png)
+![Main Window](https://raw.githubusercontent.com/sarfraznawaz2005/gitup/master/screen.jpg)
+
+![Main Window](https://raw.githubusercontent.com/sarfraznawaz2005/gitup/master/screen2.jpg)
+
 
 ## Why ##
 
