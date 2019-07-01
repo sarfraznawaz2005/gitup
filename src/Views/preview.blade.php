@@ -123,7 +123,6 @@
 @endsection
 
 @push('scripts')
-
     <script>
         $('#frm').submit(function () {
             if ($('.form-check-input:checked').length <= 0) {
@@ -132,5 +131,4 @@
             }
         });
     </script>
-
 @endpush
