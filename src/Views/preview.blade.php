@@ -133,4 +133,4 @@
         });
     </script>
 
-    @endsection
+@endpush
